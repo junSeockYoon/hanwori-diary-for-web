@@ -11,8 +11,6 @@ async function index(req, res) {
         // 1. [업무 지시] 서비스에게 "모든 게시글 데이터를 가져와줘" 라고 요청합니다.
         const result = await mainService.index();
 
-        console.log(result);
-
         // 2. [응답] 서비스로부터 받은 결과(result)를 'main'이라는 EJS 템플릿에 담아
         //    HTML 페이지로 그려서 사용자에게 보여줍니다. 
         res.render('main', { result });

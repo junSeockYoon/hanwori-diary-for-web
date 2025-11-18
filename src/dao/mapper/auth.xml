@@ -9,5 +9,10 @@
         FROM users 
         WHERE USER_ID = #{id} and PW = #{password}
     </select>
+
+    <insert id="insertUser">
+        INSERT INTO users (user_id, pw, user_type, use_yn)
+        VALUES (#{id}, #{password}, 'user', 'Y')
+    </insert>
      
 </mapper>

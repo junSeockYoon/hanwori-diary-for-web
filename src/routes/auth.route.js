@@ -15,11 +15,14 @@ const router = express.Router();
  ****************************************************************************************/
  router.get('/login', authController.login);
 
+ router.get('/signup', authController.signup);
+
 
 /****************************************************************************************
  *!                                     A P I
  *  데이터 변경/조회용 API: JSON 응답을 주거나 리다이렉트합니다.
  ****************************************************************************************/
 router.post('/api/login', authController.loginPost);
+router.post('/api/signup', authController.signupPost);
 
 module.exports = router;
