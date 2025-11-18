@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - 한우리 다이어리</title>
+    <style>
+        :root {
+            --bg-start: #f0f4ff;
+            --bg-end: #e8f6f3;
+            --card-bg: #ffffff;
+            --text-primary: #1f2937; /* gray-800 */
+            --text-secondary: #6b7280; /* gray-500 */
+            --primary: #4f46e5; /* indigo-600 */
+            --primary-hover: #4338ca; /* indigo-700 */
+            --border: #e5e7eb; /* gray-200 */
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.647);
+            --radius: 16px;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+                Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Apple Color Emoji',
+                'Segoe UI Emoji', 'Segoe UI Symbol';
+            color: var(--text-primary);
+            background: radial-gradient(1200px 800px at 10% 10%, #eef2ff 0%, rgba(238,242,255,0) 60%),
+                        radial-gradient(1000px 800px at 90% 20%, #ecfeff 0%, rgba(236,254,255,0) 55%),
+                        linear-gradient(135deg, var(--bg-start), var(--bg-end));
+            min-height: 100vh;
+        }
+
+        .main-container {
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 32px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #eef2ff;
+            color: #3730a3;
+            font-weight: 800;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .login-title {
+            margin: 0 0 6px;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .login-subtitle {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .input-group {
+            margin-top: 16px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151; /* gray-700 */
+            margin-bottom: 8px;
+        }
+
+        .input-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: #fff;
+            font-size: 14px;
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .input-control:focus {
+            outline: none;
+            border-color: #c7d2fe; /* indigo-200 */
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        .helper {
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .actions {
+            margin-top: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #374151;
+        }
+
+        .forgot {
+            font-size: 13px;
+            color: #6366f1;
+            text-decoration: none;
+        }
+
+        .forgot:hover { text-decoration: underline; }
+
+        .login-button {
+            width: 100%;
+            margin-top: 16px;
+            height: 44px;
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 0.01em;
+            transition: transform .05s ease, background-color .15s ease, box-shadow .15s ease;
+            box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
+        }
+
+        .login-button:hover { background-color: var(--primary-hover); }
+        .login-button:active { transform: translateY(1px); }
+
+        .footer {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 480px) {
+            .login-container { padding: 24px; }
+            .login-title { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="brand">HW</div>
+                <h1 class="login-title">한우리 다이어리</h1>
+                <p class="login-subtitle">계정에 로그인하여 서비스를 이용하세요</p>
+            </div>
+
+            <div class="input-group">
+                <label for="id" class="input-label">아이디</label>
+                <input type="text" id="id" class="input-control" placeholder="아이디를 입력하세요">
+            </div>
+
+            <div class="input-group">
+                <label for="password" class="input-label">비밀번호</label>
+                <input type="password" id="password" class="input-control" placeholder="비밀번호를 입력하세요">
+            </div>
+
+            <div class="actions">
+                <label class="remember"><input type="checkbox" id="remember"> 로그인 유지</label>
+                <a class="forgot" href="#" onclick="event.preventDefault(); alert('비밀번호 찾기 기능은 준비 중입니다.');">비밀번호를 잊으셨나요?</a>
+            </div>
+
+            <button class="login-button" id="loginBtn" onclick="login()">로그인</button>
+
+            <div class="footer">© <%= new Date().getFullYear() %> Hanwoori Diary</div>
+        </div>
+    </div>
+</body>
+<script>
+    function login() {
+        let id = document.getElementById('id').value;
+        let password = document.getElementById('password').value;
+        let remember = document.getElementById('remember').checked;
+
+        let params = {
+            id: id,
+            password: password,
+        };
+
+        fetch('/auth/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(params),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success) {
+                if(data.data.userType === 'admin') {
+                    alert(data.data[0].userType);
+                    // window.location.href = '/admin';
+                } else {
+                    alert(data.data[0].userType);
+                    // window.location.href = '/';
+                }
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            alert('Error:', error);
+        });
+    }
+</script>
+</html>

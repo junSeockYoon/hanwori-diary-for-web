@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상세보기 - 한우리 다이어리</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .button-group {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 24px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn-save {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background-color: #45a049;
+        }
+
+        .btn-cancel {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background-color: #da190b;
+        }
+
+        .btn-back {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-back:hover {
+            background-color: #1976D2;
+        }
+
+        .btn-delete {
+            background-color: #ff4444;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #cc0000;
+        }
+
+        .meta-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .meta-info span {
+            margin-right: 20px;
+        }
+
+        .edit-mode {
+            border: 2px solid #4CAF50;
+            background-color: #f9f9f9;
+        }
+
+        .view-mode {
+            border: 1px solid #ddd;
+            background-color: white;
+        }
+
+        .readonly {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📖 다이어리 상세보기</h1>
+        
+        <% if (result && result.length > 0) { %>
+            <% let post = result[0]; %>
+            
+            <div class="meta-info">
+                <span><strong>번호:</strong> <%= post.id %></span>
+                <span><strong>작성일:</strong> <%= post.createDt %></span>
+                <span><strong>수정일:</strong> <%= post.modifyDate || '수정되지 않음' %></span>
+            </div>
+
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" id="title" value="<%= post.title %>" class="readonly" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="content">내용</label>
+                <textarea id="content" class="readonly" readonly><%= post.content %></textarea>
+            </div>
+
+            <div class="button-group"  id="button-group">
+                <button type="button" class="btn-back" onclick="location.href='/'">목록으로</button>
+                <button type="button" class="btn-save" id="editBtn" onclick="toggleEdit()">수정하기</button>
+                <button type="button" class="btn-save" id="saveBtn" style="display: none;" onclick="savePost()">저장하기</button>
+                <button type="button" class="btn-cancel" id="cancelBtn" style="display: none;" onclick="cancelEdit()">취소</button>
+                <button type="button" class="btn-delete" onclick="deletePost()">삭제하기</button>
+            </div>
+            <button type="button" class="btn-back" onclick="update()">목록으로</button>
+        <% } else { %>
+            <div style="text-align: center; padding: 40px; color: #666;">
+                <h3>📝 게시글을 찾을 수 없습니다</h3>
+                <p>존재하지 않는 게시글이거나 삭제된 게시글입니다.</p>
+                <button type="button" class="btn-back" onclick="location.href='/'">목록으로 돌아가기</button>
+            </div>
+        <% } %>
+    </div>
+
+    <script>
+        function toggleEdit() {
+            const titleInput = document.getElementById('title');
+            const contentTextarea = document.getElementById('content');
+            const editBtn = document.getElementById('editBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+
+            // 편집 모드로 전환
+            titleInput.classList.remove('readonly');
+            titleInput.classList.add('edit-mode');
+            titleInput.readOnly = false;
+
+            contentTextarea.classList.remove('readonly');
+            contentTextarea.classList.add('edit-mode');
+            contentTextarea.readOnly = false;
+
+            // 버튼 상태 변경
+            editBtn.style.display = 'none';
+            saveBtn.style.display = 'inline-block';
+            cancelBtn.style.display = 'inline-block';
+
+            // 제목에 포커스
+            titleInput.focus();
+        }
+
+        function cancelEdit() {
+            const titleInput = document.getElementById('title');
+            const contentTextarea = document.getElementById('content');
+            const editBtn = document.getElementById('editBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+
+            // 원래 값으로 복원
+            titleInput.value = '<%= result && result[0] ? result[0].title : "" %>';
+            contentTextarea.value = '<%= result && result[0] ? result[0].content : "" %>';
+
+            // 읽기 전용 모드로 전환
+            titleInput.classList.remove('edit-mode');
+            titleInput.classList.add('readonly');
+            titleInput.readOnly = true;
+
+            contentTextarea.classList.remove('edit-mode');
+            contentTextarea.classList.add('readonly');
+            contentTextarea.readOnly = true;
+
+            // 버튼 상태 변경
+            editBtn.style.display = 'inline-block';
+            saveBtn.style.display = 'none';
+            cancelBtn.style.display = 'none';
+        }
+
+        // AJAX 수정 함수
+        async function savePost() {
+            const title = document.getElementById('title').value.trim();
+            const content = document.getElementById('content').value.trim();
+            const postId = '<%= result && result[0] ? result[0].id : "" %>';
+
+            try {
+                showMessage('수정 중...', 'info');
+                
+                const response = await fetch(`/update/${postId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        content: content
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage('수정이 완료되었습니다!', 'success');
+                    // 편집 모드 해제
+                    cancelEdit();
+                    // 페이지 새로고침으로 최신 데이터 반영
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    showMessage('수정 중 오류가 발생했습니다.', 'error');
+                }
+            } catch (error) {
+                console.error('수정 오류:', error);
+                showMessage('수정 중 오류가 발생했습니다.', 'error');
+            }
+        }
+
+        // AJAX 삭제 함수
+        async function deletePost() {
+            if (confirm('정말로 이 게시글을 삭제하시겠습니까?\n삭제된 게시글은 복구할 수 없습니다.')) {
+                if (confirm('정말로 삭제하시겠습니까?')) {
+                    const postId = '<%= result && result[0] ? result[0].id : "" %>';
+                    
+                    try {
+                        showMessage('삭제 중...', 'info');
+                        
+                        const response = await fetch(`/delete/${postId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            showMessage('게시글이 삭제되었습니다.', 'success');
+                            // 메인 페이지로 이동
+                            setTimeout(() => {
+                                location.href = '/';
+                            }, 1500);
+                        } else {
+                            showMessage('삭제 중 오류가 발생했습니다.', 'error');
+                        }
+                    } catch (error) {
+                        console.error('삭제 오류:', error);
+                        showMessage('삭제 중 오류가 발생했습니다.', 'error');
+                    }
+                }
+            }
+        }
+
+        // 메시지 표시 함수
+        function showMessage(message, type) {
+            // 기존 메시지 제거
+            const existingMessage = document.querySelector('.message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            // 새 메시지 생성
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message message-${type}`;
+            messageDiv.textContent = message;
+            
+            // 스타일 적용
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                z-index: 1000;
+                max-width: 300px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                animation: slideIn 0.3s ease-out;
+            `;
+
+            // 타입별 색상 설정
+            if (type === 'success') {
+                messageDiv.style.backgroundColor = '#4CAF50';
+            } else if (type === 'error') {
+                messageDiv.style.backgroundColor = '#f44336';
+            } else if (type === 'info') {
+                messageDiv.style.backgroundColor = '#2196F3';
+            }
+
+            document.body.appendChild(messageDiv);
+
+            // 3초 후 자동 제거
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.style.animation = 'slideOut 0.3s ease-in';
+                    setTimeout(() => {
+                        if (messageDiv.parentNode) {
+                            messageDiv.remove();
+                        }
+                    }, 300);
+                }
+            }, 3000);
+        }
+
+        // 애니메이션 CSS 추가
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function update() {
+            let id = '<%= result && result[0] ? result[0].id : "" %>';
+            let title = document.getElementById('title').value;
+            let content = document.getElementById('content').value; 
+            let params = { id, title, content };
+            console.log(params);
+        }
+    </script>
+</body>
+</html>
