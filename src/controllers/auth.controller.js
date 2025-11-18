@@ -25,7 +25,6 @@ async function loginPost(req, res) {
     }
 }
 // 위에서 정의한 컨트롤러 함수들을 다른 파일(주로 라우터)에서 사용할 수 있도록 export 합니다.
-// delete는 자바스크립트 예약어이므로 deletePost라는 이름으로 내보냅니다.
 module.exports = {
     login,
     loginPost,
