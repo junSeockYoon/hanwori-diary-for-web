@@ -78,9 +78,15 @@ diary-for-web/
    ```
 
 3. **데이터베이스 설정**
-   - MySQL 데이터베이스 생성
+   - MySQL 데이터베이스 생성 및 테이블 생성 (아래 "데이터베이스 스키마" 섹션 참조)
    - `src/config/database.js` 파일에서 데이터베이스 연결 정보 설정
-   - 필요한 테이블 생성 (users, posts 등)
+   ```javascript
+   // src/config/database.js 예시
+   host: 'localhost',
+   user: 'your_username',
+   password: 'your_password',
+   database: 'diary_db'
+   ```
 
 4. **서버 실행**
    ```bash
@@ -110,17 +116,97 @@ diary-for-web/
 
 ## 🗄️ 데이터베이스 스키마
 
+### 데이터베이스 생성
+
+```sql
+CREATE DATABASE diary_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE diary_db;
+```
+
 ### users 테이블
-- `USER_ID` (VARCHAR) - 사용자 아이디 (PK)
-- `PW` (VARCHAR) - 비밀번호
-- `USER_TYPE` (VARCHAR) - 사용자 타입
+
+사용자 정보를 저장하는 테이블입니다.
+
+```sql
+CREATE TABLE `users` (
+  `user_cd` INT NOT NULL AUTO_INCREMENT COMMENT '유저 고유 코드 (PK)',
+  `user_id` VARCHAR(50) NOT NULL UNIQUE COMMENT '유저 로그인 아이디',
+  `pw` VARCHAR(255) NOT NULL COMMENT '비밀번호 (반드시 해시하여 저장)',
+  `user_type` VARCHAR(20) DEFAULT 'user' COMMENT '유저 타입 (예: admin, user)',
+  `use_yn` CHAR(1) DEFAULT 'Y' COMMENT '사용 여부 (Y/N, N=탈퇴 처리)',
+  `create_dt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성일',
+  `modify_dt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일',
+  PRIMARY KEY (`user_cd`),
+  UNIQUE KEY `UK_user_id` (`user_id`)
+) COMMENT '유저 정보 테이블';
+```
 
 ### posts 테이블
-- `ID` (INT) - 게시글 ID (PK, AUTO_INCREMENT)
-- `TITLE` (VARCHAR) - 제목
-- `CONTENT` (TEXT) - 내용
-- `CREATE_DT` (DATETIME) - 작성일
-- `MODIFY_DATE` (DATETIME) - 수정일
+
+다이어리 게시글 정보를 저장하는 테이블입니다.
+
+```sql
+CREATE TABLE `posts` (
+  `id` INT NOT NULL AUTO_INCREMENT COMMENT '게시글 고유 코드 (PK)',
+  `title` VARCHAR(255) NOT NULL COMMENT '게시글 제목',
+  `content` TEXT NOT NULL COMMENT '게시글 내용',
+  `use_yn` CHAR(1) DEFAULT 'Y' COMMENT '사용 여부 (Y/N, N=삭제 처리)',
+  `create_dt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성일',
+  `modify_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일',
+  PRIMARY KEY (`id`)
+) COMMENT '게시글 정보 테이블';
+```
+
+### 샘플 데이터 INSERT
+
+#### users 테이블 샘플 데이터
+
+```sql
+-- 관리자 계정 (비밀번호는 실제 사용 시 bcrypt로 해시하여 저장해야 합니다)
+INSERT INTO `users` (`user_id`, `pw`, `user_type`, `use_yn`) 
+VALUES ('admin', '$2b$10$YourHashedPasswordHere', 'admin', 'Y');
+
+-- 일반 사용자 계정
+INSERT INTO `users` (`user_id`, `pw`, `user_type`, `use_yn`) 
+VALUES ('user01', '$2b$10$YourHashedPasswordHere', 'user', 'Y');
+```
+
+**주의**: 위의 `$2b$10$YourHashedPasswordHere`는 예시입니다. 실제로는 bcrypt를 사용하여 비밀번호를 해시한 값을 저장해야 합니다.
+
+#### posts 테이블 샘플 데이터
+
+```sql
+-- 샘플 다이어리 게시글
+INSERT INTO `posts` (`title`, `content`, `use_yn`) 
+VALUES ('오늘의 일기', '오늘은 날씨가 좋았다. 산책을 다녀왔다.', 'Y');
+
+INSERT INTO `posts` (`title`, `content`, `use_yn`) 
+VALUES ('주말 계획', '이번 주말에는 책을 읽고 영화를 보려고 한다.', 'Y');
+
+INSERT INTO `posts` (`title`, `content`, `use_yn`) 
+VALUES ('새로운 시작', '새로운 프로젝트를 시작했다. 기대가 된다!', 'Y');
+```
+
+### 비밀번호 해시 생성 방법
+
+Node.js에서 bcrypt를 사용하여 비밀번호를 해시하는 방법:
+
+```javascript
+const bcrypt = require('bcrypt');
+
+// 비밀번호 해시 생성
+const plainPassword = 'your_password_here';
+const saltRounds = 10;
+
+bcrypt.hash(plainPassword, saltRounds, (err, hash) => {
+    if (err) {
+        console.error('해시 생성 오류:', err);
+        return;
+    }
+    console.log('해시된 비밀번호:', hash);
+    // 이 해시 값을 데이터베이스에 저장하세요
+});
+```
 
 ## 🔐 로그인 기능
 
