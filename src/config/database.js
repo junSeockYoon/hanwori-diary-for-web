@@ -4,7 +4,7 @@ let config = {
     port: 3306,
     user: 'root',
     password: 'qwer1234@',
-    database: 'diary_dev',
+    database: 'Diary_DEV',
     connectionLimit: 30,
 };
 

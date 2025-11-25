@@ -19,6 +19,9 @@ const routes = require('./src/routes/index')
 // Node.js 내장 모듈 - 파일 경로를 다루는 유틸리티
 const path = require('path');
 
+// cookie-parser 모듈 가져오기
+const cookieParser = require('cookie-parser');
+
 
 // ========================================
 // 2. 뷰 엔진 설정 (Template Engine)
@@ -49,10 +52,12 @@ app.use(express.urlencoded({ extended: true }));
 // 예: public/style.css → http://localhost:3001/style.css
 app.use(express.static(path.join(__dirname, 'public')));
 
+// cookie-parser 미들웨어 등록
+app.use(cookieParser()); 
+
 // 라우터 미들웨어 등록
 // 모든 요청('/')을 routes 모듈로 전달하여 처리
 app.use('/', routes);
-
 // ========================================
 // 4. 서버 시작 (Server Start)
 // ========================================

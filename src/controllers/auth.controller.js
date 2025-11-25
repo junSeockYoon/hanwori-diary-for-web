@@ -37,6 +37,11 @@ async function loginPost(req, res) {
         if(!result || result.length === 0) {
             return res.redirect('/auth/login?error=아이디 또는 비밀번호가 올바르지 않습니다.');
         }
+
+        console.log(result);
+
+        //user id coolie 저장 
+        res.cookie('userCd', result[0].userCd, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
       
         // 서버에서 직접 리다이렉트 처리
         if(result[0].userType === 'admin') {
@@ -91,10 +96,27 @@ async function signupPost(req, res) {
     }
 }
 
+async function userTypeApi(req, res) {
+    try {
+
+        let params = {
+            userCd: req.cookies.userCd || null
+        }
+
+        const result = await authService.userTypeApi(params);
+        res.json(result);
+    } catch (error) {
+        console.error('=== userType 조회 에러 ===');
+        console.error(error);
+        res.status(500).send('서버 오류가 발생했습니다.');
+    }
+}
+
 // 위에서 정의한 컨트롤러 함수들을 다른 파일(주로 라우터)에서 사용할 수 있도록 export 합니다.
 module.exports = {
     login,
     loginPost,
     signup,
     signupPost,
+    userTypeApi
 };

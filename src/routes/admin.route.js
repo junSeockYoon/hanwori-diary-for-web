@@ -15,5 +15,8 @@ const router = express.Router();
 // 관리자 페이지: 관리자 메인 화면을 렌더링합니다.
 router.get('/', adminController.index);
 
+//사용자 관리 
+router.get('/userManagement', adminController.userManagement);
+
 // 이 라우터를 외부로 내보내서 상위 라우터(index.js)에서 사용합니다.
 module.exports = router;

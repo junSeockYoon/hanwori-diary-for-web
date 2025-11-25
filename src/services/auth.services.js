@@ -22,8 +22,21 @@ async function signup(params) {
     }
 }
 
+async function userTypeApi(params) {
+    try {
+
+        console.log(params);
+        
+        const result = await commonDao(mapper.AUTH, 'userTypeApi', params);
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
+
 // 위에서 정의한 서비스 함수들을 컨트롤러에서 사용할 수 있도록 export 합니다.
 module.exports = {
     login,
     signup,
+    userTypeApi
 };

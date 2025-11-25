@@ -5,7 +5,8 @@
 
     <select id="userType">
         SELECT 
-            user_type 
+            user_type ,
+            user_cd
         FROM users 
         WHERE USER_ID = #{id} and PW = #{password}
     </select>
@@ -14,5 +15,23 @@
         INSERT INTO users (user_id, pw, user_type, use_yn)
         VALUES (#{id}, #{password}, 'user', 'Y')
     </insert>
+
+    <select id="userTypeApi">
+        SELECT 
+            user_type 
+        FROM users 
+        WHERE use_yn = 'Y'
+        and user_cd = #{userCd}
+    </select>
+
+    <select id="userList">
+        SELECT 
+            user_cd,
+            user_id,
+            user_type,
+            use_yn
+        FROM users 
+        WHERE use_yn = 'Y'
+    </select>
      
 </mapper>

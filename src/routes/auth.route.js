@@ -24,5 +24,7 @@ const router = express.Router();
  ****************************************************************************************/
 router.post('/api/login', authController.loginPost);
 router.post('/api/signup', authController.signupPost);
+//userType 조회 API
+router.get('/api/userType', authController.userTypeApi);
 
 module.exports = router;
