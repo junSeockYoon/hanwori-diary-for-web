@@ -52,9 +52,45 @@ async function userManagement(req, res) {
     }
 }
 
+async function userDetail(req, res) {
+    try {
+        let params = {
+            userCd: req.params.userCd
+        }
+        const userDetail = await adminService.userDetailApi(params);
+
+        res.render('admin/userDetail', { title: '사용자 상세', userDetail });
+    } catch (error) {
+        console.error('=== 사용자 상세 에러 ===');
+        console.error(error);
+        res.status(500).send('서버 오류가 발생했습니다.');
+    }
+}
+
+async function updateUserType(req, res) {
+    try {
+        const params = {
+            userCd: req.params.userCd,
+            userType: req.body.userType
+        };
+
+        if (!params.userType || !['admin', 'user'].includes(params.userType)) {
+            return res.status(400).json({ success: false, message: '유효하지 않은 사용자 유형입니다.' });
+        }
+
+        await adminService.updateUserTypeApi(params);
+        return res.json({ success: true, message: '사용자 유형이 변경되었습니다.' });
+    } catch (error) {
+        console.error('=== 사용자 유형 변경 에러 ===');
+        console.error(error);
+        res.status(500).json({ success: false, message: '서버 오류가 발생했습니다.' });
+    }
+}
 // 위에서 정의한 컨트롤러 함수들을 다른 파일(주로 라우터)에서 사용할 수 있도록 export 합니다.
 module.exports = {
     index,
-    userManagement
+    userManagement,
+    userDetail,
+    updateUserType
 };
 

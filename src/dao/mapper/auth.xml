@@ -33,5 +33,24 @@
         FROM users 
         WHERE use_yn = 'Y'
     </select>
+
+    <select id="userDetail">
+        SELECT 
+            user_cd,
+            user_id,
+            user_type,
+            use_yn
+        FROM users 
+        WHERE use_yn = 'Y'
+        and user_cd = #{userCd}
+        order by create_dt desc
+    </select>
+
+    <update id="updateUserType">
+        UPDATE users 
+        SET user_type = #{userType},
+            modify_dt = NOW()
+        WHERE user_cd = #{userCd}
+    </update>
      
 </mapper>

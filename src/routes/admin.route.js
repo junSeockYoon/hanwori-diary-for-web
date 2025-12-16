@@ -18,5 +18,11 @@ router.get('/', adminController.index);
 //사용자 관리 
 router.get('/userManagement', adminController.userManagement);
 
+//사용자 관리 - 사용자 상세 
+router.get('/userManagement/userDetail/:userCd', adminController.userDetail);
+
+//사용자 관리 - 사용자 유형 변경 API
+router.post('/api/userManagement/userType/:userCd', adminController.updateUserType);
+
 // 이 라우터를 외부로 내보내서 상위 라우터(index.js)에서 사용합니다.
 module.exports = router;

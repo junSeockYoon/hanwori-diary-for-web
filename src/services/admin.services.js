@@ -11,6 +11,26 @@ async function userListApi(params) {
     }
 }
 
+async function userDetailApi(params) {
+    try {
+        const result = await commonDao(mapper.AUTH, 'userDetail', params);
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function updateUserTypeApi(params) {
+    try {
+        const result = await commonDao(mapper.AUTH, 'updateUserType', params);
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
-    userListApi
+    userListApi,
+    userDetailApi,
+    updateUserTypeApi
 };
