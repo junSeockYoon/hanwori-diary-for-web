@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 추가 - 한우리 다이어리</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 24px 28px;
+        }
+
+        .card-header h1 {
+            font-size: 22px;
+            margin-bottom: 6px;
+        }
+
+        .card-header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .card-body {
+            padding: 24px 28px 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 1px #6366f1;
+        }
+
+        .helper-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .error-message {
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background-color: #fef2f2;
+            color: #b91c1c;
+            font-size: 13px;
+        }
+
+        .card-footer {
+            padding: 14px 28px 20px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 9px 18px;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(79, 70, 229, 0.35);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.03);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>새 사용자 추가</h1>
+                <p>관리자 권한으로 새 사용자를 등록합니다.</p>
+            </div>
+            <form method="post" action="/admin/userManagement/create">
+                <div class="card-body">
+                    <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+                        <div class="error-message"><%= errorMessage %></div>
+                    <% } %>
+
+                    <div class="form-group">
+                        <label class="form-label" for="userId">사용자 ID</label>
+                        <input
+                            id="userId"
+                            name="userId"
+                            type="text"
+                            required
+                            minlength="3"
+                            class="form-input"
+                            value="<%= formData && formData.userId ? formData.userId : '' %>"
+                        />
+                        <p class="helper-text">로그인에 사용될 아이디입니다. 3자 이상 입력해주세요.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">임시 비밀번호</label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            minlength="4"
+                            class="form-input"
+                        />
+                        <p class="helper-text">최소 4자 이상 입력해주세요.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="passwordConfirm">임시 비밀번호 확인</label>
+                        <input
+                            id="passwordConfirm"
+                            name="passwordConfirm"
+                            type="password"
+                            required
+                            minlength="4"
+                            class="form-input"
+                        />
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="/admin/userManagement" class="btn btn-secondary">← 목록으로 돌아가기</a>
+                    <button type="submit" class="btn btn-primary">➕ 사용자 추가</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+

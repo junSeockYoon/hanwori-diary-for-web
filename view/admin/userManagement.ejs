@@ -106,6 +106,31 @@
             transition: all 0.3s;
         }
 
+        .actions-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .add-user-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95em;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+        }
+
+        .add-user-btn:hover {
+            background: #45b8b0;
+            box-shadow: 0 4px 12px rgba(78, 205, 196, 0.5);
+            transform: translateY(-1px);
+        }
+
         .refresh-btn:hover {
             background: white;
             color: #667eea;
@@ -274,7 +299,10 @@
             <div class="table-container">
                 <div class="table-header">
                     <h2>사용자 목록</h2>
-                    <button class="refresh-btn" onclick="location.reload()">🔄 새로고침</button>
+                    <div class="actions-right">
+                        <a href="/admin/userManagement/create" class="add-user-btn">➕ 사용자 추가</a>
+                        <button class="refresh-btn" onclick="location.reload()">🔄 새로고침</button>
+                    </div>
                 </div>
 
                 <% if (userList && userList.length > 0) { %>

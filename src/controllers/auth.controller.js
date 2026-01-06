@@ -38,7 +38,6 @@ async function loginPost(req, res) {
             return res.redirect('/auth/login?error=아이디 또는 비밀번호가 올바르지 않습니다.');
         }
 
-
         //user id coolie 저장 
         res.cookie('userCd', result[0].userCd, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
       
@@ -47,7 +46,7 @@ async function loginPost(req, res) {
             return res.redirect('/admin');
         } else {
             return res.redirect('/');
-        }
+        } 
        
     } catch (error) {
         console.error('=== 로그인 페이지 에러 ===');

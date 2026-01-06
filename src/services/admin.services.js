@@ -29,8 +29,24 @@ async function updateUserTypeApi(params) {
     }
 }
 
+// 관리자에서 신규 사용자 추가
+async function createUserApi(params) {
+    try {
+        // auth.xml 의 insertUser 쿼리는 #{id}, #{password} 를 사용
+        const daoParams = {
+            id: params.userId,
+            password: params.password,
+        };
+        const result = await commonDao(mapper.AUTH, 'insertUser', daoParams);
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     userListApi,
     userDetailApi,
-    updateUserTypeApi
+    updateUserTypeApi,
+    createUserApi
 };

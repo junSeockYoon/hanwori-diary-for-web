@@ -18,6 +18,12 @@ router.get('/', adminController.index);
 //사용자 관리 
 router.get('/userManagement', adminController.userManagement);
 
+// 사용자 관리 - 사용자 추가 화면
+router.get('/userManagement/create', adminController.userCreateForm);
+
+// 사용자 관리 - 사용자 추가 처리
+router.post('/userManagement/create', adminController.userCreate);
+
 //사용자 관리 - 사용자 상세 
 router.get('/userManagement/userDetail/:userCd', adminController.userDetail);
 
